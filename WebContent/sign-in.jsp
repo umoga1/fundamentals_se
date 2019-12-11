@@ -1,3 +1,9 @@
+<% 
+
+request.getSession();
+
+	
+%>
 <!DOCTYPE html>
 <html>
 
@@ -44,6 +50,13 @@
             <div class="body">
                 <form action="Login" method="POST">
                     <div class="msg">Sign in to start your session</div>
+                    <div align="center" style="color:red; align-text: center !important;"><% if (session.getAttribute("error") == null ) { %>
+					    <p>  </p>
+					<% } else {
+						String error = session.getAttribute("error").toString();
+					%>
+					    <p> <%=error %> </p>
+					<% } %></div>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
@@ -81,6 +94,11 @@
             </div>
         </div>
     </div>
+    
+    <%
+   
+    session.setAttribute("error", "");
+    %>
 
     <!-- Jquery Core Js -->
     <script src="material/plugins/jquery/jquery.min.js"></script>

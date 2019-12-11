@@ -62,7 +62,7 @@ public class Register extends HttpServlet {
 			      Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","SvcpiloT54321");
 			      
 			      Statement stmt = con.createStatement();
-			      ResultSet rs = stmt.executeQuery("select username, email from users.users where username='"+username+"' and password='"+password+"'");
+			      ResultSet rs = stmt.executeQuery("select username, email from users.users where username='"+username+"' or email='"+email+"'");
 			      
 			      if(rs.next()) {
 			          

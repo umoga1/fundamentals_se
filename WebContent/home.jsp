@@ -1,19 +1,18 @@
-<% 
+<%
+String email1 = (null == session.getAttribute("email")) ? "" : session.getAttribute("email").toString();
+String username = (null == session.getAttribute("username")) ? "" : session.getAttribute("username").toString();
+if (username == "")
+{
+  response.sendRedirect("sign-in.jsp");
 
-request.getSession();
-if (session == null) { 
-	response.sendRedirect("sign-in.jsp");
+}else{
+	
+
+	%>
 	
 	
 
-} 
 
-	String username = session.getAttribute("username").toString();
-	String email1 = session.getAttribute("email").toString();
-	
-	
-String name = request.getParameter("name");
-%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -1170,3 +1169,8 @@ String name = request.getParameter("name");
 </body>
 
 </html>
+
+	<%
+	
+}
+%>
