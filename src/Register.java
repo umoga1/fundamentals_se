@@ -47,11 +47,11 @@ public class Register extends HttpServlet {
 		doGet(request, response);
 		
 		PrintWriter out = response.getWriter();
-		
-		String username = request.getParameter("username");
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String retype_password = request.getParameter("retype_password");
+		HttpSession session = request.getSession();
+		String username = request.getParameter("username").trim();
+		String email = request.getParameter("email").trim();
+		String password = request.getParameter("password").trim();
+		String retype_password = request.getParameter("retype_password").trim();
 		
 		if(retype_password.equals(password)) {
 			
@@ -60,24 +60,42 @@ public class Register extends HttpServlet {
 				
 				  Class.forName("com.mysql.jdbc.Driver");
 			      Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","SvcpiloT54321");
-			      PreparedStatement stmt = null;
-			    
-			      stmt = con.prepareStatement("insert into users.users (email, username, password) values (?,?,?)");
 			      
+			      Statement stmt = con.createStatement();
+			      ResultSet rs = stmt.executeQuery("select username, email from users.users where username='"+username+"' and password='"+password+"'");
 			      
-			      stmt.setString(1, email);
-			      stmt.setString(2, username);
-			      stmt.setString(3, password);
-			      stmt.executeUpdate();
-			      
-			     //stmt.executeUpdate(insert);
-			   
+			      if(rs.next()) {
 			          
-		          HttpSession session = request.getSession();
-		          session.setAttribute("username", username);
-		          session.setAttribute("email", email);
-		          
-		          response.sendRedirect("home.jsp");
+			          
+			          session.setAttribute("error", "details arleady exist in database. please try again.");
+			          
+			          
+			          response.sendRedirect("sign-up.jsp");
+			          
+			        }else {
+			        	
+			        	  PreparedStatement stmt1 = null;
+					      stmt1 = con.prepareStatement("insert into users.users (email, username, password) values (?,?,?)");
+					      
+					      
+					      stmt1.setString(1, email);
+					      stmt1.setString(2, username);
+					      stmt1.setString(3, password);
+					      stmt1.executeUpdate();
+					      
+					          
+				         
+				          session.setAttribute("username", username);
+				          session.setAttribute("email", email);
+				          
+				          response.sendRedirect("home.jsp");
+			        	
+			        }
+			      
+			      
+			      
+			      
+			      
 			          
 			       
 				
@@ -91,7 +109,10 @@ public class Register extends HttpServlet {
 			
 			
 		}else {
-			
+			session.setAttribute("error", "passwords do not match.");
+	          
+	          
+	          response.sendRedirect("sign-up.jsp");
 		}
 		
 	}
